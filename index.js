@@ -1,4 +1,9 @@
+import { getUserSystem } from './common'
+
 const VoicesTTS = ((window) => {
+
+    let audio = new Audio()
+
 	let CONF = {
 		lang: 'zh-CN',  // language
 		rate: 1,  		// 语速
@@ -13,10 +18,6 @@ const VoicesTTS = ((window) => {
 
 	const init = (conf) => {
 		if (conf) CONF = {...CONF, ...conf}
-
-		if (!browserSupport()) {
-			return false
-		}
 	}
 
 	const speak = (text) => {
@@ -25,10 +26,17 @@ const VoicesTTS = ((window) => {
 		utterThis.rate = CONF.rate
 		utterThis.volume = CONF.volume
         utterThis.text = text
-        window.speechSynthesis.speak(utterThis)
-	}
+        if (!browserSupport()) {
+            let audio = new Audio()
+            audio.src = `http://tts.baidu.com/text2audio?lan=zh&per=0&ie=UTF-8&spd=1&text=${text}`
+            audio.play()
+        } else {
+            window.speechSynthesis.speak(utterThis)
+        }
+    }
 
 	const stop = () => {
+        audio.stop()
     	window.speechSynthesis.cancel()
   	}
 
