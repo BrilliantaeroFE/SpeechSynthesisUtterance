@@ -17,7 +17,9 @@ const VoicesTTS = ((window) => {
 
 
 	const init = (conf) => {
-		if (conf) CONF = {...CONF, ...conf}
+		if (conf) {
+            CONF = Object.assign({}, CONF, conf)
+        }
 	}
 
 	const speak = (text) => {
